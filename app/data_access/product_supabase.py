@@ -34,6 +34,19 @@ def dataGetProduct(id):
     )
     return response.data[0]
 
+# getting data from products by category
+def dataGetProductByCategory(id: int) :
+      response = (
+        supabase.table("product")
+        .select("*, category(name)")
+        .eq("category_id", id)
+        .order("title", desc=False)
+        .execute()
+    )
+    return response.data
+
+    
+
 # update product
 def dataUpdateProduct(product: Product) :
     # pass params individually
@@ -53,8 +66,12 @@ def dataAddProduct(product: Product) :
         .insert(product.dict()) # convert product object to dict - required by Supabase
         .execute()
     )
+    if (return response.data):
+        return dataGetProduct(return response.data[0]['id'])
+    
+    return False
     # result is 1st item in the list
-    return response.data[0]
+    #  return response.data[0]
 
 # get all categories
 def dataGetCategories():
